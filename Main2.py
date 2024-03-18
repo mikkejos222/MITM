@@ -1,6 +1,6 @@
 import scapy.all as scapy 
 import time 
-
+#https://www.geeksforgeeks.org/python-how-to-create-an-arp-spoofer-using-scapy/
 def get_mac(ip): 
 	arp_request = scapy.ARP(pdst = ip) 
 	broadcast = scapy.Ether(dst ="ff:ff:ff:ff:ff:ff") 
