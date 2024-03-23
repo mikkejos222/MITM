@@ -35,7 +35,7 @@ try:
         spoof(gateway_ip, target_ip)
         sent_packets_count = sent_packets_count + 2
         print("\r[*] Packets Sent " + str(sent_packets_count), end="")
-        time.sleep(2)  # Waits for two seconds
+        time.sleep(1)  # Waits for one second
 
 except KeyboardInterrupt:
     print("\nCtrl + C pressed.............Exiting")
