@@ -1,6 +1,7 @@
 #! /usr/bin/python
 from scapy.layers.l2 import Ether, ARP
-
+import scapy.all as scapy
+import time
 try:
     from logging import getLogger, ERROR
 
