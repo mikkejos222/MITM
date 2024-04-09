@@ -5,7 +5,7 @@ import scapy.all as scapy
 import time
 from scapy.sendrecv import sr
 
-
+#https://www.securitynik.com/2018/07/understanding-ip-fragmentation.html
 def ICMPAttacks():
     def thePingOfDeath():
         ans, unans = sr(IP(dst="192.168.1.0/24")/ICMP(), timeout=3)
